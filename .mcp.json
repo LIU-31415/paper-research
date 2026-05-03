@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "semantic-scholar": {
+      "command": "uvx",
+      "args": ["semantic-scholar-mcp"]
+    },
+    "arxiv": {
+      "command": "npx",
+      "args": ["-y", "@futurelab-studio/latest-science-mcp@latest"]
+    },
+    "pubmed": {
+      "command": "npx",
+      "args": ["-y", "@cyanheads/pubmed-mcp-server@latest"]
+    }
+  }
+}

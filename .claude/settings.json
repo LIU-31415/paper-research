@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext *)",
+      "Bash(curl *)",
+      "Bash(gh *)",
+      "Bash(ruff *)",
+      "Bash(export *)",
+      "Bash(winget *)",
+      "Bash(npx *)",
+      "Bash(uv *)",
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(rm *)",
+      "Bash(mkdir *)",
+      "Bash(ln *)",
+      "Bash(uvx *)",
+      "Bash(claude *)",
+      "mcp__memory__*",
+      "mcp__context7__*",
+      "mcp__sequential-thinking__*",
+      "mcp__fetch__*",
+      "mcp__arxiv__*",
+      "mcp__semantic-scholar__*",
+      "mcp__pubmed__*"
+    ]
+  }
+}

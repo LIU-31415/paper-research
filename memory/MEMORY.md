@@ -1,0 +1,2 @@
+- [Post-error efficiency suggestions](feedback_post-error_suggestions.md) — After failures, proactively tell user what to install/log in for smoother future work
+- [Global vs project config rule](feedback_global_vs_project_config.md) — Global → ~/.claude/CLAUDE.md, project → project-root/CLAUDE.md

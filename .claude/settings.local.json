@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Read(//c/Users/LIU/AppData/Roaming/Claude/**)",
+      "Read(//c/Users/LIU/.claude/skills/**)",
+      "WebFetch(domain:github.com)",
+      "Bash(gh repo *)",
+      "Bash(npx skills *)",
+      "Bash(curl -sL --connect-timeout 10 \"https://raw.githubusercontent.com/shubhamsaboo/awesome-llm-apps/master/skills/fact-checker/SKILL.md\" -o /tmp/factcheck.md)",
+      "Read(//tmp/**)",
+      "Bash(curl -sL --connect-timeout 10 \"https://raw.githubusercontent.com/davila7/claude-code-templates/master/skills/literature-review/SKILL.md\" -o /tmp/litreview.md)",
+      "Bash(gh --version)",
+      "Bash(uvx semantic-scholar-mcp *)",
+      "Read(//c/Users/LIU/Desktop/**)",
+      "Read(//c/Users/LIU/.claude/**)",
+      "Read(//c/Users/LIU//**)",
+      "Bash(xargs grep *)",
+      "Bash(npm view *)",
+      "Bash(taskkill /f /im explorer.exe)",
+      "Bash(start explorer.exe)",
+      "Read(//c//**)",
+      "Bash(rm -rf \"/c/Users/LIU/Desktop/pua/\")",
+      "Bash(echo \"exit: $?\")",
+      "Bash(tasklist /v)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\LIU\\.claude\\projects\\c--Users-LIU-Desktop-agent\\memory",
+      "c:\\Users\\LIU\\Desktop"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "semantic-scholar",
+    "arxiv"
+  ]
+}
