@@ -87,7 +87,7 @@ Layer 3: archive/sessions/      — 仅显式查询，历史会话记录
 
 ```
 agent/
-├── PRD.md                          # 本文件：项目需求文档
+├── archive/references/PRD.md       # 本文件：项目需求文档
 ├── CLAUDE.md                       # Layer 0: AI 行为指南 + 用户画像（核心）
 ├── archive/                        # Layer 1+3: 知识存档根目录
 │   ├── INDEX.md                    # 目录索引（自动维护）

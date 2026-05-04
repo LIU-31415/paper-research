@@ -11,18 +11,15 @@ Read `archive/evolution/README.md` section "Guardrail Enforcement". Internalize 
 Identify target file(s) to patch. Common targets:
 - `CLAUDE.md` — add workflow rule or prevention tip
 - `MCP memory` — add observation via `mcp__memory__add_observations`
-- `archive/evolution/patterns/active/*.md` — update pattern status
+- `archive/evolution/patterns/*.md` — update pattern status
 
-**Check**: Using `grep`, verify the proposed patch content does not already exist in the target file.
-- If conflict found → **ABORT** and write to `patches/rolled-back/{timestamp}_conflict.md`
-
-**Check**: Verify the patch is an APPEND operation (no DELETE, no MODIFY of existing lines).
-- If patch modifies/removes existing content → **ABORT**
+- **Check**: Using `grep`, verify the proposed patch content does not already exist in the target file. If conflict found → **ABORT** and write to `archive/evolution/{timestamp}_conflict.md`
+- **Check**: Verify the patch is an APPEND operation (no DELETE, no MODIFY of existing lines). If patch modifies/removes existing content → **ABORT**
 
 ## Step 2: Snapshot
 
 ```bash
-cp <target-file> archive/evolution/patches/applied/{timestamp}_backup_<basename>
+cp <target-file> archive/evolution/{timestamp}_backup_<basename>
 ```
 
 Verify snapshot exists before proceeding.
@@ -47,20 +44,20 @@ Run >= 3 test cases:
 
 **If any fail**: Restore from snapshot:
 ```bash
-cp archive/evolution/patches/applied/{timestamp}_backup_<basename> <target-file>
+cp archive/evolution/{timestamp}_backup_<basename> <target-file>
 ```
-Move patch record to `patches/rolled-back/`.
+Mark patch record as `[rolled-back]`.
 
 ## Step 5: Record
 
-Write a patch record to `patches/applied/{timestamp}_PatchName.md`:
+Write a patch record to `archive/evolution/{timestamp}_PatchName.md`:
 
 ```markdown
 # {timestamp}: PatchName
 
 target: path/to/target
-pattern_ref: patterns/active/ErrorCategory.md
-snapshot: patches/applied/{timestamp}_backup_<basename>
+pattern_ref: patterns/ErrorCategory.md
+snapshot: {timestamp}_backup_<basename>
 
 ## Diff
 [description of what was appended]

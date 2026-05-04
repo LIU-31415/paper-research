@@ -9,105 +9,85 @@
 - **Tools:** Claude Code, VSCode
 
 ## Workflow Preferences
+
 - Interaction: Concise, result-oriented
 - Output: Chinese-English mixed, English for tags/filenames, Chinese for detailed content
 - Archive: Only record essential conclusions, not full conversation
 
-## Archive System Rules
+## Archive Rules
 
-### Topic Routing Rules
-Load topic files by task type — never load irrelevant content:
-
-| Task Type | Files to Load | Don't Load |
-|-----------|--------------|------------|
-| Writing | `archive/topics/Writing-Outputs.md`, (+ `Research-Notes.md` if needed) | Tech-Solutions.md, Tool-Config.md |
-| Research | `archive/topics/Research-Notes.md` | Writing, Tech, Tool |
-| Tech/Coding | `archive/topics/Tech-Solutions.md` + `archive/topics/Tool-Config.md` | Research, Writing |
-| Mixed (e.g. "write a paper about X tech") | Read `archive/INDEX.md` first (~0.5K) to decide | — |
-| Unknown | Read `archive/INDEX.md` first | — |
-| Full knowledge (user says "based on all my knowledge") | Load ALL topics | — |
-
-### Task Disambiguation
-
-When task type is ambiguous (e.g., contains both tech and research elements):
-
-1. Ask user to clarify: "这是技术实现还是调研方向？还是两者都有？"
-2. If user confirms mixed → follow Mixed routing rule
-3. Only route after user confirmation — never guess
-
-### Auto-Archive Triggers (Mixed Mode)
-- Research completed → write to `archive/topics/Research-Notes.md`
-- Research output produced → save full deliverable to `archive/outputs/YYYY-MM-DD_Topic.md`
-- Writing output produced → write to `archive/topics/Writing-Outputs.md`
-- Tech problem solved → write to `archive/topics/Tech-Solutions.md`
-- Tool/config setup → write to `archive/topics/Tool-Config.md`
-- Session summary → write to `archive/sessions/YYYY-MM-DD_Title.md`
-- User says "记一下" / "这个存档" / "save this" → manual trigger
-
-### Archive Structure
-
-```text
-archive/
-├── INDEX.md          ← 索引（始终加载）
-├── topics/           ← 知识提炼（结论、模型、空白）
-├── outputs/          ← 调研结果、工作流完整交付件
-├── sessions/         ← 操作流水账
-└── references/       ← 参考文档、工作流定义
-```
-
-### Dedup & Conflict Rules
-- Before writing, read existing content in the target topic file
-- Only write NEW content — skip duplicates
-- If new content is more precise → update/improve existing entry
-- If new content CONTRADICTS existing → ask user to confirm, never silently overwrite
-- If user confirms/verifies existing conclusion → add `[verified]` mark
-- **Staleness check**: if modifying a topic file, scan entries older than 6 months → prompt user with `[last-reviewed: YYYY-MM-DD]`; if confirmed valid, update stamp; if outdated, mark `[deprecated: YYYY-MM-DD]` and add new entry
-
-### Knowledge Graph Rules
-- New project/technology → create Entity + Observations
-- Dependency/connection between known entities → create Relation
-- Information conflict → prompt user to confirm
-
-### Format Rules
-- Title: `YYYY-MM-DD: Short English Title`
-- Tags: `#tag1 #tag2`
-- Content: One-sentence conclusion first, then 3-5 bullet points
-- Keep minimal — only reusable conclusions
-- Staleness: entries older than 6 months get a `[last-reviewed: YYYY-MM-DD]` stamp; deprecated entries get `[deprecated: YYYY-MM-DD]`
-- Always update `archive/INDEX.md` after changes
-- MCP server setup → see `archive/references/MCP-Setup.md`
-- External references → see `archive/references/README.md`
-- Self-evolution system → see `archive/evolution/README.md`
+See [archive/RULES.md](archive/RULES.md) for all archive rules: routing, auto-archive triggers, dedup, format, sharding.
 
 ---
 
-### Self-Evolution Protocol (Phase 1 — Experience Log + Auto-Patch)
+## Quick Reference
 
-At the end of each **non-trivial task** (anything beyond a single file edit):
+- **Model:** deepseek-v4-flash — **no vision/multimodal**, tool/模型能力是两层，不要混答
+- **MCP Servers available:** Semantic Scholar (`mcp__semantic-scholar__*`), arXiv (`mcp__arxiv__*`), PubMed (`mcp__pubmed__*`), Memory (`mcp__memory__*`), WebFetch (`mcp__fetch__*`)
+- **Config files:** `.claude/settings.json` (project), `.claude/settings.local.json` (local override), `.mcp.json` (MCP servers), `memory/MEMORY.md` (auto-memory index, 200行截断)
+- **Behavioral directives:** [AGENTS.md](AGENTS.md) — self-evolution protocol, guardrails
+- **Archive rules:** [archive/RULES.md](archive/RULES.md) — routing, dedup, format, sharding
 
-1. Write one experience log entry to `archive/evolution/logs/YYYY-MM-DD_HHMM_ShortTitle.md`
-2. Follow the schema in `archive/evolution/README.md` — capture `outcome`, `error_signal`, `root_cause`
-3. If outcome is `failure` or `partial`: run pattern detection
+## Hallucination Prevention
 
-**Failure Pattern Detection** (run when outcome is failure):
+### 行为红线（每次会话自动生效）
 
-- Read `archive/evolution/logs/` last 5 entries
-- If same `error_signal` appears >= 2 times in any 5-window → write to `archive/evolution/patterns/active/YYYY-MM-DD_ErrorCategory.md`
-- Pattern format: `error_signal`, count, first_seen, last_seen, suggested_prevention
-- If pattern already exists → increment count + update last_seen
+1. **先读再答原则** — 涉及项目代码/文件/配置时，必须先 Read 相关文件再回答。禁止仅凭训练数据推测文件内容、路径、API。
+2. **置信度标注** — 不确定的信息必须标注：「据我了解」「我不确定」「推测：」，禁止用肯定语气陈述未经文件验证的内容。
+3. **先规划再执行** — 涉及多文件修改/重构/架构变更时，必须先调用 EnterPlanMode 输出计划，超哥确认后再动手。禁止跳过规划直接改代码。
+4. **来源可追溯** — 引用代码/配置/文档内容时，必须标注来源文件路径和行号（如 `[auth.ts:42](src/auth.ts#L42)`）。
 
-**Auto-Patch Trigger** (run when pattern count >= 3):
+### 执行策略
 
-1. Load guardrails from `archive/evolution/README.md`
-2. Pre-flight: verify no conflicts, no delete operations
-3. Snapshot target file to `patches/applied/{timestamp}_backup/`
-4. Apply: append corrective rule to the relevant section
-5. Verify: run 3 test cases → pass → `[verified]`; fail → restore from backup
-6. Write patch record
+- 事实性查询 → 先 Read 后答
+- 复杂任务 → 先 Plan 后做
+- 不确定 → 直接说"不确定"，不猜
+- 输出 → 有据可依，无据标注
 
-**Guardrail Enforcement** (mandatory before any patch):
+## Model Routing Protocol
 
-- `[G1]` ONLY append — never modify or delete existing content
-- `[G2]` Pre-flight grep for conflicts; if found → abort and log
-- `[G3]` Snapshot must exist before applying any changes
-- `[G4]` After patch, verify >=3 cases; if any fail → restore snapshot
+**配置：** `deepseek-v4-flash`（默认）↔ `deepseek-v4-pro`（Agent 分发）
+**路由策略：** 自动判定任务复杂度，简单任务直接执行，复杂任务分发到 Pro。
+
+### 判定标准
+
+**简单任务 → 直接执行（Flash）：**
+
+- 单次查询（Read/Grep/Glob）
+- 单文件简单修改（1-5 行）
+- 执行一条 Bash 命令并解读
+- 知识问答、信息查询
+- Archive/记忆读写
+
+**复杂任务 → Agent(model:"sonnet") 分发到 Pro：**
+
+- 跨多文件生成/重构
+- 需要规划步骤的调试/排障
+- 多步骤研究（搜索→读→分析→综合）
+- 3+ 工具编排的任务
+- 架构设计/技术决策
+- 涉及失败重试的场景
+- **不确定时 → 默认走 Pro**
+
+### 执行
+
+```yaml
+# 复杂任务分发模板
+Agent:
+  model: "sonnet"            # → deepseek-v4-pro
+  description: "简短描述"
+  prompt: |
+    [任务上下文+要求]
+    
+开工前用 Read 工具读取以下文件，按其中的行为协议执行：
+- 核心行为：找到 pua 插件目录下的 skills/pua/SKILL.md
+```
+
+Agent 子任务执行完毕后，主会话收集结果、端到端交付。
+
+### 回退策略
+
+- 若 Pro 仍然卡住 → 调整 prompt 颗粒度，或拆分为更小的子任务
+- 若 Agent 分发开销大于收益 → 当前任务标记为"简单"，后续同类型直接 Flash 执行
+
+> **此协议可升级。** 未来如果有更好的自动路由机制（如 API 网关、模型代理），更新本段即可。

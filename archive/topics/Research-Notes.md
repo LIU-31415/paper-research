@@ -6,6 +6,39 @@ _研究资料、文献调研笔记归档于此。新内容置顶。_
 
 ---
 
+## 2026-05-03: β-FeOOH 磁化方案文献调研
+
+**Tags:** #β-FeOOH #akaganeite #magnetic #silica-coating #core-shell #morphology-preservation
+
+### 核心结论
+
+β-FeOOH（双锥形貌）在碱性条件下不稳定，原方案 Step 2-3 的强碱环境（氨水 pH 11）会侵蚀形貌。文献给出三条路线避开这个矛盾：改良 Stöber 减碱、PDA 替代 SiO₂、相变转化保护。
+
+### 关键文献
+
+| # | 文献 | 要点 |
+|---|------|------|
+| 1 | Hijnen & Clegg, _Simple Synthesis of Versatile Akaganéite-Silica Core–Shell Rods_ (2012) | β-FeOOH 直接包 SiO₂ 可行，氨水浓度是关键参数 |
+| 2 | Tadić et al., _Silica-Coated and Bare Akaganeite Nanorods: Structural and Magnetic Properties_ (2015) | 系统对比包 SiO₂ 前后的结构和磁性变化 |
+| 3 | _Rod-like particles of silica-coated maghemite: Synthesis via akaganeite_ (2019) | SiO₂ 作"模具"保护形貌，相变转化 β-FeOOH → γ-Fe₂O₃，Ms=47 Am²/kg |
+| 4 | _Phase structure dependence of magnetic behaviour in iron oxide nanorods_ (2020) | β-FeOOH → Fe₃O₄/γ-Fe₂O₃/α-Fe₂O₃ 相变路径与磁性调控 |
+| 5 | _Synthesis of Magnetite Nanorods from the Reduction of Iron Oxy-Hydroxide with Hydrazine_ (2020) | 水合肼还原 β-FeOOH → Fe₃O₄，但形貌不保留 |
+| 6 | Fang et al., _In situ redox-oxidation polymerization for β-FeOOH@Au/PDA core-shell_ (2019) | PDA 可直接包 β-FeOOH，条件温和（pH 8.5），且能螯合金属离子 |
+| 7 | _Insights into Growing Silica Around Monocrystalline Magnetite Nanorods_ (2026) | 单晶 Fe₃O₄ 纳米棒的 SiO₂ 包覆最新进展 |
+
+### 推荐的路线
+
+- **路线 A（改良原方案）：** 减氨水（pH 9）、缩时间（30min），超薄 SiO₂ 壳；Fe₃O₄ 先单独合成再后装饰
+- **路线 B（PDA 替代）：** 多巴胺 pH 8.5 自聚成壳，利用邻苯二酚螯合 Fe 离子原位生长 Fe₃O₄
+- **路线 C（相变转化）：** SiO₂ 做模具保护形貌，热处理/还原转化 β-FeOOH → Fe₃O₄
+
+### 空白
+
+- 无文献系统比较 β-FeOOH 在不同 pH/时间下的形貌退化定量数据
+- 无 β-FeOOH@PDA@Fe₃O₄ 三层结构的合成报道
+
+---
+
 ## 2026-05-02: PFAS-CVD Three-Hit 模型 (文献调研 + 验证)
 
 **Tags:** #PFAS #cardiovascular #kidney #three-hit-model #literature-review #reference-validation
