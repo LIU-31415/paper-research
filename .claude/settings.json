@@ -22,7 +22,8 @@
       "mcp__fetch__*",
       "mcp__arxiv__*",
       "mcp__semantic-scholar__*",
-      "mcp__pubmed__*"
+      "mcp__pubmed__*",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
