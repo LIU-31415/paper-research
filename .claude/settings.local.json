@@ -43,7 +43,8 @@
       "WebFetch(domain:ai.meta.com)",
       "WebFetch(domain:scholar.google.com)",
       "Edit(~/.claude/skills/perplexity-search/**)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git rm *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\LIU\\.claude\\projects\\c--Users-LIU-Desktop-agent\\memory",
