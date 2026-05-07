@@ -22,6 +22,7 @@
 
 | Date | Source | Key Findings | Impact |
 |------|--------|-------------|--------|
+| 2026-05-05 | OpenHanako (GitHub) | Personal AI agent with memory/personality/autonomy. Key learnings: custom memory with natural fading, 3-tier knowledge architecture, 4-level PathGuard sandbox, plugin convention (PluginContext + Session Bus + 2-level permissions), skills ecosystem from GitHub | P0 — memory recency tiering implemented; P1 — plugin architecture is next gap to address |
 | 2026-05-04 | Cursor Blog | Bugbot: self-improving rules from PR feedback, candidate→promotion gate, 78% resolution rate on 110K+ repos | P1 — our system lacks external feedback loop and candidate gating |
 | 2026-05-04 | Cursor Blog | Real-time RL from production inference (5h cycle), +2.28% agent edit persistence, -3.13% user dissatisfaction | P2 — model-level training out of scope, but reward-from-user-behavior concept validated |
 | 2026-05-04 | Semantic Scholar | Darwin Godel Machine: self-improving coding agents via archive+evolution, 20%→50% SWE-bench | P1 — directly relevant evolution mechanism, archive of agents similar to our pattern archive |

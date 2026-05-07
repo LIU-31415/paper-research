@@ -54,6 +54,8 @@
   },
   "enabledMcpjsonServers": [
     "semantic-scholar",
-    "arxiv"
+    "arxiv",
+    "playwright",
+    "context7"
   ]
 }

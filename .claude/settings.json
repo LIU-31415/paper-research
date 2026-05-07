@@ -20,10 +20,15 @@
       "mcp__context7__*",
       "mcp__sequential-thinking__*",
       "mcp__fetch__*",
-      "mcp__arxiv__*",
       "mcp__semantic-scholar__*",
-      "mcp__pubmed__*",
-      "Bash(git commit -m ' *)"
+      "mcp__playwright__*",
+      "Bash(git commit -m ' *)",
+      "Bash(npm search *)",
+      "Bash(gh-mcp --help)",
+      "Edit(~/.claude/skills/paper-research/**)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\LIU\\.claude"
     ]
   }
 }

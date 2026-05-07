@@ -1,0 +1,13 @@
+id: evolution-core
+name: Evolution Core
+version: 1.0.0
+description: Evolution engine core operations — pattern detection, auto-patch, drift detection
+author: system
+trust: builtin
+contributes:
+  sops:
+    - ../../archive/evolution/sops/AB-TESTING-FRAMEWORK.md
+  guards:
+    - ../../archive/evolution/sops/DRIFT-DETECTION-GUARDRAILS.md
+  workflows:
+    - ../../archive/evolution/README.md

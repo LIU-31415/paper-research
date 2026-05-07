@@ -1,6 +1,6 @@
 # Archive Index
 
-`last-updated: 2026-05-04T20:00 | consolidated: true`
+`last-updated: 2026-05-05T12:00 | consolidated: true`
 
 ## Topics Overview
 
@@ -30,6 +30,7 @@
 
 | Date | Title | Tags |
 | --- | --- | --- |
+| 2026-05-05 | [OpenHanako-Study-And-Evolution](sessions/2026-05-05_OpenHanako-Study-And-Evolution.md) | #openhanako #evolution #memory #plugin |
 | 2026-05-03 | [β-FeOOH-Parameter-Optimization](sessions/2026-05-03_β-FeOOH-Parameter-Optimization.md) | #β-FeOOH #magnetic #protocol #archive-self-fix |
 | 2026-05-03 | [Archive-Consolidation-And-MCP-Setup](sessions/2026-05-03_Archive-Consolidation-And-MCP-Setup.md) | #archive #consolidation #mcp #semantic-scholar #arxiv |
 | 2026-05-03 | [gh-CLI-Setup-And-Global-Config](sessions/2026-05-03_gh-CLI-Setup-And-Global-Config.md) | #github #gh-cli #config #workflow |
@@ -58,6 +59,7 @@
 | » [Archive SOP](evolution/sops/Archive-Memory-System.md) | Archive memory system init workflow |
 | » [AB Testing](evolution/sops/AB-TESTING-FRAMEWORK.md) | A/B testing protocol for SOP validation |
 | » [Drift Detection](evolution/sops/DRIFT-DETECTION-GUARDRAILS.md) | Drift detection + G5-G8 guardrails |
+| » [Memory Tier Maintenance](evolution/sops/Memory-Tier-Maintenance.md) | Hot/Warm/Cold memory tier fade thresholds and audit procedure |
 
 ## References
 

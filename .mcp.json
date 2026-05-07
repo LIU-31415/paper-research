@@ -4,13 +4,13 @@
       "command": "uvx",
       "args": ["semantic-scholar-mcp"]
     },
-    "arxiv": {
+    "playwright": {
       "command": "npx",
-      "args": ["-y", "@futurelab-studio/latest-science-mcp@latest"]
+      "args": ["@playwright/mcp@latest"]
     },
-    "pubmed": {
+    "context7": {
       "command": "npx",
-      "args": ["-y", "@cyanheads/pubmed-mcp-server@latest"]
+      "args": ["-y", "@upstash/context7-mcp"]
     }
   }
 }

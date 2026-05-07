@@ -1,0 +1,13 @@
+id: archive-sops
+name: Archive SOPs
+version: 1.0.0
+description: Standard operating procedures for archive system operations
+author: system
+trust: builtin
+contributes:
+  sops:
+    - ../../archive/evolution/sops/Archive-Memory-System.md
+    - ../../archive/evolution/sops/Memory-Tier-Maintenance.md
+    - ../../archive/evolution/sops/SOP-EXTRACTION-WORKFLOW.md
+  knowledge:
+    - ../../archive/RULES.md

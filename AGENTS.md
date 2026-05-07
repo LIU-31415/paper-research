@@ -6,6 +6,38 @@
 
 ---
 
+## Plugin Loading Protocol (Session Start)
+
+At session start, two loading paths run:
+
+### Built-in Plugins (`plugins/built-in/*/plugin.yaml`)
+
+Multi-contribution plugin manifests (SOPs, guards, knowledge, workflows):
+
+1. **Scan** — Glob `plugins/built-in/*/plugin.yaml`
+2. **Parse** — For each manifest, validate: `id`, `version`, `trust` fields mandatory
+3. **Activate** — For each activated plugin, resolve contribution file paths (relative to plugin dir) and classify:
+   - `sops` → note in SOP registry (available SOPs for task execution)
+   - `guards` → append to behavioral directives for this session
+   - `knowledge` → inject into memory context
+   - `workflows` → register workflow templates
+4. **Log** — Output loaded plugin summary
+
+### Community Skills (`plugins/community/*/SKILL.md`)
+
+Native Claude Code skills — auto-discovered and loaded by the `Skill` tool. Agent's role is lifecycle management:
+
+- `discovered` → present for review → user approval → INDEX.md `enabled`
+- `enabled` → `Skill` tool discovers on next session start
+- `disabled` → agent skips the community dir during session start scan
+
+**Community trust flow:**
+
+- Skills in `plugins/community/` start as `discovered` → require review prompt → user approval → `enabled`
+- Disabled community skills are skipped during scan (log: "Skill [id] — disabled, skipping")
+
+**Protocol detail:** See [plugins/PLUGINS.md](plugins/PLUGINS.md) | [Skill Import SOP](../archive/evolution/sops/Skill-Import.sop.md)
+
 ## Self-Evolution Protocol (Phase 1 — Experience Log + Auto-Patch)
 
 At the end of each **non-trivial task** (anything beyond a single file edit):
@@ -75,11 +107,16 @@ retry_count: N (how many tool retries occurred)
 duration_min: N
 tools_used: [tool list]
 tools_success_rate: N% (successful tool calls / total tool calls)
+est_input_tokens: NK (estimated total input tokens consumed)
+est_output_tokens: NK (estimated total output tokens consumed)
+retrieval_cost: NK (tokens spent on pre-execution retrieval, 0 if skipped)
 ```
+
+> **Token estimation method:** Rough per-tool baseline — Read ~0.5-2K, Write/Edit ~0.5-1K, Bash ~0.5-1K, Agent dispatch ~2-4K overhead, Glob/Grep ~0.2K. Multiply by call count per tool type. Not precise, good enough for trend analysis.
 
 Record at `archive/evolution/metrics/YYYY-MM-DD_metrics.json` (one JSON object per file).
 
-Trend aggregation is maintained in `archive/evolution/metrics/INDEX.md` — updated on write with 7-day and 30-day rollups.
+Trend aggregation is maintained in `archive/evolution/metrics/INDEX.md` — updated on write with 7-day and 30-day rollups. Added trend: **token_efficiency** — output tokens per unit of user value (proxied by outcome × user_sentiment).
 
 ## Feedback Ingestion Protocol
 
@@ -109,8 +146,9 @@ After non-trivial sessions, the system runs autonomous evolution as a background
 1. Write experience log (as before)
 2. Run pattern detection on last 5 logs
 3. If count >= 3 pattern found with no conflicts → apply auto-patch to CLAUDE.md behavioral guards (respecting G1-G6 guardrails)
-4. Record quality metrics
-5. Set `auto_evo_applied: {true|false}` in the experience log
+4. **Run memory tier audit** — Check auto-memory files for stale entries; downgrade Hot→Warm→Cold per fade thresholds; update MEMORY.md index accordingly (see `archive/evolution/sops/Memory-Tier-Maintenance.md`)
+5. Record quality metrics
+6. Set `auto_evo_applied: {true|false}` in the experience log
 
 ### Scope Limits
 
@@ -123,3 +161,24 @@ After non-trivial sessions, the system runs autonomous evolution as a background
 - **Archive rules:** [archive/RULES.md](archive/RULES.md)
 - **Self-Evolution Engine:** [archive/evolution/README.md](archive/evolution/README.md)
 - **Frontier Radar:** [archive/evolution/frontier-radar.md](archive/evolution/frontier-radar.md)
+
+---
+
+## Complex Task Protocols (v0.5)
+
+Routing triggers for pre-execution knowledge retrieval, task decomposition, sub-agent dispatch, and pitfall avoidance. Detailed protocols are in `archive/evolution/protocols/` — load on demand.
+
+### Trigger Mapping
+
+| Condition | Protocol File | When to Load |
+| --- | --- | --- |
+| Complex task starts (score 7-9 or ambiguous) | [PreExecutionRetrieval.md](archive/evolution/protocols/PreExecutionRetrieval.md) | Before first execution tool call — search patterns/SOPs/archive for prior knowledge |
+| Complexity evaluation ≥ 7 | [TaskDecomposition.md](archive/evolution/protocols/TaskDecomposition.md) | Need to break task into 3-5 sub-tasks before executing |
+| Sub-agent dispatch needed | [SubAgentDispatch.md](archive/evolution/protocols/SubAgentDispatch.md) | Dispatching Agent tool with prompt template + PUA injection |
+| Mid-execution milestone | [PitfallAvoidance.md](archive/evolution/protocols/PitfallAvoidance.md) | At milestone checkpoints — match current state against known failure patterns |
+
+### Protocol Lifecycle
+
+- These protocols are loaded **on demand** — never at session start
+- Simple tasks (score 3-4) skip all protocols entirely
+- Workflow templates in `archive/evolution/workflows/INDEX.md` complement these protocols with step-by-step execution sequences

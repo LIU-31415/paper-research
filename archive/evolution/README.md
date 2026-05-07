@@ -59,6 +59,15 @@ repeat_count: How many times this exact error appeared
 feedback_signals: [list of {correction|retry|interruption|praise|criticism} during this task, or N/A]
 auto_evo_applied: {true|false} — whether autonomous evolution triggered at session end
 
+## Token Accounting
+est_input_tokens: NK (approximate total input tokens consumed)
+est_output_tokens: NK (approximate total output tokens consumed)
+retrieval_cost: NK (tokens spent on pre-execution retrieval — 0 if not activated)
+tools_used_count: N (total tool calls across all types)
+retrieval_roi: {high|medium|low|N/A} — whether retrieval information justified its token cost
+
+> **Token estimation and ROI guidance:** See AGENTS.md Quality Metrics section for per-tool baselines. ROI is determined by: **high** = retrieval found actionable prevention/SOP that changed execution approach; **medium** = found useful context but didn't materially change approach; **low** = consumed tokens with no relevant matches; **N/A** = retrieval not activated.
+
 ## Context
 intent: What user asked for
 approach: What was tried (3-5 word summary)

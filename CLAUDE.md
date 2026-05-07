@@ -23,7 +23,7 @@ See [archive/RULES.md](archive/RULES.md) for all archive rules: routing, auto-ar
 ## Quick Reference
 
 - **Model:** deepseek-v4-flash — **no vision/multimodal**, tool/模型能力是两层，不要混答
-- **MCP Servers available:** Semantic Scholar (`mcp__semantic-scholar__*`), arXiv (`mcp__arxiv__*`), PubMed (`mcp__pubmed__*`), Memory (`mcp__memory__*`), WebFetch (`mcp__fetch__*`)
+- **MCP Servers available:** Semantic Scholar (`mcp__semantic-scholar__*`), Playwright (`mcp__playwright__*`), context7 (`mcp__context7__*`), Memory (`mcp__memory__*`), WebFetch (`mcp__fetch__*`)
 - **Config files:** `.claude/settings.json` (project), `.claude/settings.local.json` (local override), `.mcp.json` (MCP servers), `memory/MEMORY.md` (auto-memory index, 200行截断)
 - **Behavioral directives:** [AGENTS.md](AGENTS.md) — self-evolution protocol, guardrails
 - **Archive rules:** [archive/RULES.md](archive/RULES.md) — routing, dedup, format, sharding
@@ -91,3 +91,21 @@ Agent 子任务执行完毕后，主会话收集结果、端到端交付。
 - 若 Agent 分发开销大于收益 → 当前任务标记为"简单"，后续同类型直接 Flash 执行
 
 > **此协议可升级。** 未来如果有更好的自动路由机制（如 API 网关、模型代理），更新本段即可。
+
+### Pre-Execution Knowledge Retrieval
+
+Before the routing decision, if task is complex: load [PreExecutionRetrieval.md](archive/evolution/protocols/PreExecutionRetrieval.md) to search patterns/SOPs/archive for prior knowledge. Injects findings into context before routing.
+
+### Task Decomposition + Routing
+
+If complexity score (per [TaskDecomposition.md](archive/evolution/protocols/TaskDecomposition.md)) ≥ 7:
+
+1. **Decompose** into 3-5 sub-tasks with verification criteria
+2. **Route each sub-task independently:**
+   - Simple sub-tasks (1-2 tools, single file) → Flash directly
+   - Complex sub-tasks (3+ tools, multi-file, ambiguity) → Agent(model:"sonnet") dispatch
+3. **Assemble** results from all sub-tasks into final output
+
+### Agent Dispatch Template
+
+When dispatching sub-tasks via `Agent` tool, use the template from [SubAgentDispatch.md](archive/evolution/protocols/SubAgentDispatch.md): Background + WHAT/WHERE/DONE/DON'T + output contract + result assembly.
