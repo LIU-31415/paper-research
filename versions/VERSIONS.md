@@ -4,10 +4,10 @@
 
 ## 版本索引
 
-| 版本 | 文件 | 日期 | 状态 |
-|------|------|------|------|
-| **v2.2** | `../SKILL.md` | 2026-05-23 | **active** |
-| v2.1 | [v2.1-SKILL.md](v2.1-SKILL.md) | 2026-05-22 | superseded |
+| 版本 | Git Tag | 文件 | 日期 | 状态 |
+|------|---------|------|------|------|
+| **v2.2** | [`v2.2`](https://github.com/LIU-31415/paper-research/releases/tag/v2.2) | `../SKILL.md` | 2026-05-23 | **active** |
+| v2.1 | [`v2.1`](https://github.com/LIU-31415/paper-research/releases/tag/v2.1) | [v2.1-SKILL.md](v2.1-SKILL.md) | 2026-05-22 | superseded |
 
 ## v2.1 → v2.2 主要变更
 
@@ -23,7 +23,13 @@
 
 ## 版本管理规范
 
-1. **大版本升级**（如 v2.x → v3.0）：复制当前 SKILL.md 到 `versions/` 目录，更新索引
+1. **大版本升级**（如 v2.x → v3.0）：
+   - 复制当前 `SKILL.md` → `versions/v{X.Y}-SKILL.md`（**不删除、不覆盖老文件**）
+   - 更新本索引文件
+   - 修改 SKILL.md 到新版本
+   - 提交后打 git tag：`git tag -a v{X.Y} -m "..."` + `git push --tags`
 2. **小版本迭代**（如 v2.2 → v2.2.1）：仅在 SKILL.md 的 Version History 表记录
 3. **版本命名**：`v{major}.{minor}.{patch}` (semver)
 4. **状态标记**：`active` → `superseded` → `archived`
+5. **GitHub Releases**：大版本同步创建 Release，引用 git tag，附 changelog
+6. **历史文件永不清除** — 每个版本的完整 md 文件永久保留在 `versions/` 目录下
