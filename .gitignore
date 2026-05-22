@@ -1,2 +1,11 @@
 # Binary documents
 *.docx
+
+# Claude Code local/runtime config
+.claude/settings.local.*
+
+# Local secrets
+.env
+.env.*
+*.pem
+*.key
