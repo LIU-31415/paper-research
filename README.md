@@ -12,6 +12,49 @@
 
 ---
 
+## ⚠️ 使用前提（必读）
+
+> **本 Skill 依赖 Claude Code 的 MCP（Model Context Protocol）生态。以下条件不满足则无法正常运行。**
+
+### 所需环境
+
+| 组件 | 来源 | 说明 |
+|------|------|------|
+| **Claude Code** | [安装指南](https://docs.anthropic.com/en/docs/claude-code) | 运行本 Skill 的 CLI 环境 |
+| **WebSearch / WebFetch** | Claude Code **内置** | 无需额外配置，开箱即用 |
+| **Semantic Scholar MCP** | 需在 `.mcp.json` 中配置 | 学术搜索核心依赖，需 [API Key](https://api.semanticscholar.org/)（免费） |
+| **context7 MCP** | 需在 `.mcp.json` 中配置 | 技术文档查询（框架/库/SDK），非必需但建议配 |
+
+### Semantic Scholar MCP 配置示例
+
+在项目根目录（或 `~/.claude/`）的 `.mcp.json` 中添加：
+
+```json
+{
+  "mcpServers": {
+    "semantic-scholar": {
+      "command": "npx",
+      "args": ["@semantic-scholar/mcp-server"],
+      "env": {
+        "S2_API_KEY": "你的 API Key"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["@context7/mcp-server"]
+    }
+  }
+}
+```
+
+> 🔑 Semantic Scholar API Key 免费申请：[https://api.semanticscholar.org/](https://api.semanticscholar.org/)
+
+### 使用约定
+
+执行过程中会在当前工作目录下创建以研究主题命名的文件夹存放产出物（如 `fe3o4-heterostructure-review/01-investigation/`），请确保有写入权限。
+
+---
+
 ## 两种模式
 
 | 模式 | 场景 | 输出 |
