@@ -6,7 +6,7 @@
 
 | 版本 | Git Tag | 文件 | 日期 | 状态 |
 |------|---------|------|------|------|
-| **v2.2** | [`v2.2`](https://github.com/LIU-31415/paper-research/releases/tag/v2.2) | `../SKILL.md` | 2026-05-23 | **active** |
+| **v2.2** | [`v2.2`](https://github.com/LIU-31415/paper-research/releases/tag/v2.2) | `SKILL.md` | 2026-05-23 | **active** |
 | v2.1 | [`v2.1`](https://github.com/LIU-31415/paper-research/releases/tag/v2.1) | [v2.1-SKILL.md](v2.1-SKILL.md) | 2026-05-22 | superseded |
 
 ## v2.1 → v2.2 主要变更
