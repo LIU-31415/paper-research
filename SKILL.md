@@ -1,3 +1,4 @@
+---
 name: paper-research
 description: >
   Use when the user wants to research a topic, search for papers, fact-check, or
@@ -11,9 +12,11 @@ description: >
 
 # Research Protocol
 
+执行任何模式前先读 [研究执行门槛](protocols/research-gates.md)。继续项目时先核对主题目录research-state.md及现行源文件；所有模式共用项目隔离、历史有效性、独立研究及结论阅读用途规则。
+
 > **Source of truth for all search/research workflows.** 主入口，根据用户需求自动路由到对应模式。
 
-`version: v4.0 | created: 2026-05-04 | updated: 2026-06-05 | status: active`
+`version: v4.1 | created: 2026-05-04 | updated: 2026-10-12 | status: active`
 
 ---
 
@@ -34,16 +37,16 @@ description: >
 
 协议文件采用按需加载（渐进式披露）——不同模式只加载自己需要的文档，避免上下文过载。
 
-1. **判断模式**：根据 Mode Selection 表判断用户意图
+1. **核对上下文后判断模式**：先执行研究门槛，确认当前项目/状态和历史材料有效性，再根据 Mode Selection 表判断用户意图
 
 2. **加载协议**：
-   - 判断为 **Quick** → 立即 Read `skills/paper-research/protocols/quick-mode.md`，严格遵循 Step 1-8
-   - 判断为 **Deep** → 立即 Read `skills/paper-research/protocols/deep-mode.md`，严格遵循 Phase 1-6
+   - 判断为 **Quick** → 立即 Read `protocols/quick-mode.md`，严格遵循 Step 1-8
+   - 判断为 **Deep** → 立即 Read `protocols/deep-mode.md`，严格遵循 Phase 1-6
 
 3. **执行过程中按需加载跨模式协议**：
-   - 获取到文献全文且满足条件时 → Read `skills/paper-research/protocols/hierarchical-reading.md`
-   - 收集到 sub-agent claim-table 后 → Read `skills/paper-research/protocols/verification.md`
-   - 合成/报告完成后，最终输出前 → Read `skills/paper-research/protocols/verification.md`
+   - 获取到文献全文且满足条件时 → Read `protocols/hierarchical-reading.md`
+   - 收集到 sub-agent claim-table 后 → Read `protocols/verification.md`
+   - 合成/报告完成后，最终输出前 → Read `protocols/verification.md`
 
 4. **铁律**：
    - 任何情况下不跳过协议步骤
@@ -53,6 +56,8 @@ description: >
 ---
 
 ## 极简搜索（无需加载子文档）
+
+极简仅省略模式文档，不省略研究门槛；无需项目条件的一次事实查询不强加样本/仪器要求。
 
 处理"查一个事实/快速验证"等简单任务时，可以不加载 `quick-mode.md`，直接执行以下精简流程：
 
@@ -66,6 +71,8 @@ description: >
 ---
 
 ## Protocol Index
+
+所有模式首先加载 [research-gates.md](protocols/research-gates.md)，该门槛不依赖是否取得全文或是否启用sub-agent。
 
 | 文件 | 内容 | 何时加载 |
 |------|------|---------|
@@ -98,7 +105,7 @@ description: >
 {research-topic}/03-report/              (report_prefix=03-)
 ```
 
-**跨模式切换映射**：从 Quick 切换到 Deep 时，`01-` 目录前缀不变（可复用已有 investigation），但 `02-`（analysis）在 Deep 中对应 `03-`。切换时需创建 Deep Mode 缺失目录（`01-scoping/`, `04-composition/`, `05-review/`, `06-report/`），**不重命名已有目录**。
+**跨模式切换映射**：从 Quick 切换到 Deep 时，`01-` 目录前缀不变（仅复用通过研究门槛有效性检查的 investigation），但 `02-`（analysis）在 Deep 中对应 `03-`。切换时需创建 Deep Mode 缺失目录（`01-scoping/`, `04-composition/`, `05-review/`, `06-report/`），**不重命名已有目录**。
 
 ### 变量定义（子文件参考）
 
@@ -111,6 +118,8 @@ description: >
 
 | Date | Version | Change |
 |:---|:---|:---|
+| 2026-10-12 | **v4.1** | 统一项目状态与历史复用、独立研究判断、阅读用途及claim支撑门槛；修复入口frontmatter分隔符 |
+
 | 2026-06-05 | **v4.0** | 语义重构：references/ → protocols/；合并 CrossSource+Content → verification.md；kebab-case 命名；Agent 模板提取到 agents/；最小可行流程；三视角审查修复 |
 | 2026-06-04 | v2.8 | Dynamic Workflows 并行拓扑 + Phase 2/5 扇出-验证-归并三原则 |
 | 2026-06-04 | v2.7 | Quick Mode: add Step 1.5 WebSearch-first refinement, Keyword Engineering, Fan-Out Search, Chinese paper fallback; Deep Mode: Phase 2 search dispatch spec |

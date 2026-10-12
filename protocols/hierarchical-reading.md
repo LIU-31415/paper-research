@@ -8,6 +8,8 @@
 
 ## 触发条件
 
+先执行 [研究门槛](research-gates.md) §4。分层是阅读组织方式，gist与下载成功都不表示claim已验证；实际阅读层级和必要SI须单独记录。
+
 **入口**：Content Fetching / Investigation 阶段拿到文献全文后
 
 **判断**：
@@ -136,10 +138,10 @@ XRD 和 TEM 确认了异质界面存在，磁滞回线显示交换偏置增强 |
 | 场景 | 精读策略 |
 |------|----------|
 | 用户问具体方法/数据 | → 精读对应的 Methods/Results 块 |
-| 用户问主要发现 | → 精读 Discussion/Conclusion 块 |
-| 需要引用某结论 | → 精读该 claim 来源块，核实原文表述 |
+| 用户问主要发现 | → 用Discussion/Conclusion定位，再核对相关Results/图表；判断效应或归因时补Methods与必要SI |
+| 需要引用某结论 | → 核对claim来源及用途所需Methods/Results/图表/必要SI，记录原文位置、条件与限制 |
 | 对比多篇文献 | → 精读每篇的 Results/Discussion 块 |
-| 只需了解范围 | → 只读 gist 索引，不精读 |
+| 只需定位范围 | → gist只作为定位线索；转述科学结论前核查原文，不能把gist当已验证支撑 |
 
 ### 精读输出规范
 
@@ -183,9 +185,9 @@ XRD 和 TEM 确认了异质界面存在，磁滞回线显示交换偏置增强 |
 当文献数 ≥ 2 篇时，先判断是单线处理还是 Sub-agent 并行：
 
 - **单线处理**（文献数 < 2）：走本协议 Step 1→2→3→4
-- **Sub-agent 并行**（文献数 ≥ 2）：分派到独立 sub-agent 执行完整分层阅读，**详细模板和调度规则见** `skills/paper-research/agents/literature-reader.md`
+- **Sub-agent 并行**（文献数 ≥ 2）：分派到独立 sub-agent 执行完整分层阅读，**详细模板和调度规则见** `agents/literature-reader.md`
 
-主 agent 收集所有 sub-agent 输出 → [多 Agent 信息核对](skills/paper-research/protocols/verification.md)（verification.md data 模式）。
+主 agent 收集所有 sub-agent 输出 → [多 Agent 信息核对](verification.md)（verification.md data 模式）。
 
 ### 跨模式调用点
 
@@ -198,7 +200,7 @@ XRD 和 TEM 确认了异质界面存在，磁滞回线显示交换偏置增强 |
 
 ## 与本 skill 的关系
 
-本协议被 `skills/paper-research/SKILL.md` 引用。在 Quick Mode 和 Deep Mode 中，获取文献全文后插入本流程。
+本协议被 `SKILL.md` 引用。在 Quick Mode 和 Deep Mode 中，获取文献全文后插入本流程。
 
 - Quick Mode：通过 `quick-mode.md` 的 Step 3 触发
 - Deep Mode：通过 `deep-mode.md` 的 Phase 2 触发
@@ -207,8 +209,8 @@ XRD 和 TEM 确认了异质界面存在，磁滞回线显示交换偏置增强 |
 
 ## Related
 
-- `skills/paper-research/SKILL.md` — 主 skill 入口
-- `skills/paper-research/protocols/quick-mode.md` — Quick Mode 协议
-- `skills/paper-research/protocols/deep-mode.md` — Deep Mode 协议
-- `skills/paper-research/protocols/verification.md` — 下游多 Agent 核对协议
-- `skills/paper-research/protocols/verification.md` — 下游内容审查协议
+- `SKILL.md` — 主 skill 入口
+- `protocols/quick-mode.md` — Quick Mode 协议
+- `protocols/deep-mode.md` — Deep Mode 协议
+- `protocols/verification.md` — 下游多 Agent 核对协议
+- `protocols/verification.md` — 下游内容审查协议

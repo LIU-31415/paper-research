@@ -1,13 +1,15 @@
 # Source Reliability Matrix
 
 > 跨会话累积的源可靠性评分，按领域分级。每次 session 结束后可从 `.session-log.md` 增量更新。
-> Part of `paper-research` skill — loaded by `skills/paper-research/SKILL.md` 按需引用。
+> Part of `paper-research` skill — loaded by `SKILL.md` 按需引用。
 
 `version: v1.0 | created: 2026-06-05 | status: active`
 
 ---
 
 ## 评分方法论
+
+执行 [研究门槛](research-gates.md)。下列评分只衡量检索相关性、可获取性和接口性能，用于工具路由，不是研究质量或claim置信度；访问失败不表示科学证据较弱。
 
 | 维度 | 权重 | 评估方法 |
 |------|:--:|---------|
@@ -47,6 +49,8 @@
 
 ## Session-Log 格式
 
+日志是历史检索经验，不是当前研究状态或已验证答案。读取旧日志/报告前核对主题research-state.md、项目/条件版本、检索日期、原文依据及撤回/替代记录；日志更新保留此前运行记录。
+
 每次 session 结束时（Quick Mode Step 9 / Deep Mode Phase 6 后），写入 `{research-topic}/.session-log.json`：
 
 ```json
@@ -78,6 +82,6 @@
 
 ## Related
 
-- `skills/paper-research/SKILL.md` — 主 skill 入口（Protocol Index）
-- `skills/paper-research/protocols/quick-mode.md` — Quick Mode（Step 9 记录 session-log）
-- `skills/paper-research/protocols/deep-mode.md` — Deep Mode（Phase 6 后记录 session-log）
+- `SKILL.md` — 主 skill 入口（Protocol Index）
+- `protocols/quick-mode.md` — Quick Mode（Step 9 记录 session-log）
+- `protocols/deep-mode.md` — Deep Mode（Phase 6 后记录 session-log）

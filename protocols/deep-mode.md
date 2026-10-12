@@ -1,7 +1,7 @@
 # Deep Mode — 学术研究管线
 
 > Structured multi-agent academic research pipeline for systematic reviews and in-depth analysis.
-> Part of `paper-research` skill — loaded by `skills/paper-research/SKILL.md` when Deep Mode is selected.
+> Part of `paper-research` skill — loaded by `SKILL.md` when Deep Mode is selected.
 
 `version: v3.0 | created: 2026-05-07 | updated: 2026-06-05 | status: active`
 
@@ -28,6 +28,8 @@ User Input
 
 ## Phase 1: Scoping (Interactive)
 
+先执行 [研究门槛](research-gates.md)，读取/建立当前主题research-state.md；只加载本项目匹配条件，复用Quick/旧报告前检查版本、原核查日期和撤回项。状态未明不恢复旧决定，普通文献调研不强加样本条件。
+
 > **启动条件**：用户选择 Deep Mode / 深度研究需求
 
 | Agent | Output |
@@ -52,7 +54,7 @@ User Input
 
 ```
 {research-topic}/
-├── 01-scoping/       ← Phase 1 输出（已有文件移入）
+├── 01-scoping/       ← Phase 1 输出（仅移入通过有效性检查的既有文件）
 ├── 02-investigation/
 │   └── literature/   ← 精读文献 + sub-agent 输出
 ├── 03-analysis/      ← 核对报告 + 合成笔记
@@ -85,17 +87,17 @@ User Input
 | **Bibliography Agent** | Bibliography → `02-investigation/bibliography.md` — Systematic search, annotated bibliography (APA 7.0) |
 | **Source Verification Agent** | Verification → `02-investigation/source-verification.md` — Evidence hierarchy grading, predatory journal check, CoI flagging |
 
-> **获取到文献全文后** → 判断文献数：≥2 篇则启动 Sub-agent 并行分层阅读（每篇完整执行质量快检→分块→gist→精读→claim 提取 + 原文下载，输出 4 文件到 `02-investigation/literature/{paper_id}/`），主 agent 收集后执行下方核对步骤；1 篇则主 agent 单线执行 [分层阅读协议](skills/paper-research/protocols/hierarchical-reading.md)，输出到同一目录结构。
+> **获取到文献全文后** → 判断文献数：≥2 篇则启动 Sub-agent 并行分层阅读（每篇完整执行质量快检→分块→gist→精读→claim 提取 + 原文下载，输出 4 文件到 `02-investigation/literature/{paper_id}/`），主 agent 收集后执行下方核对步骤；1 篇则主 agent 单线执行 [分层阅读协议](hierarchical-reading.md)，输出到同一目录结构。
 
 ### Phase 2→3: 多 Agent 信息核对
 
-主 agent 收集所有 sub-agent 的 claim-table 后，执行完整 [多 Agent 信息核对](skills/paper-research/protocols/verification.md) 流程（4 步：归并→比对→裁决→报告），核对报告输出到 `03-analysis/cross-validation-report.md`。
+主 agent 收集所有 sub-agent 的 claim-table 后，执行完整 [多 Agent 信息核对](verification.md) 流程（4 步：归并→比对→裁决→报告），核对报告输出到 `03-analysis/cross-validation-report.md`。
 
 ### Agent Dispatch Specification (Phase 2 Search)
 
 Bibliography Agent 的搜索扇出调度规范已提取到独立文件：
 
-**详细规范** → `skills/paper-research/agents/bibliography-agent.md`
+**详细规范** → `agents/bibliography-agent.md`
 
 内容包括：搜索词精化策略、扇出拓扑图、归并规则、Tool Preloading 要求。
 
@@ -108,7 +110,7 @@ Bibliography Agent 的搜索扇出调度规范已提取到独立文件：
 
 > **完成清单**：
 > - [ ] Bibliography 搜索完成（含搜索词精化 + 扇出调度）
-> - [ ] 文献全文已获取并分层阅读完成
+> - [ ] 已记录实际阅读层级和原文位置；所用关键claim具备用途所需原文/必要SI，缺失项保留待核而非宣称已完整精读
 > - [ ] 多 Agent 信息核对已完成（verification.md）
 > - [ ] Source Verification 已写入
 > - [ ] 核对报告已输出到 `03-analysis/cross-validation-report.md`
@@ -144,7 +146,7 @@ Bibliography Agent 的搜索扇出调度规范已提取到独立文件：
 |-------|--------|
 | **Report Compiler** | Draft → `04-composition/draft-report.md` — Full APA 7.0 report: Title → Abstract → Intro → Method → Findings → Discussion → References |
 
-> **报告草稿完成后** → 执行[内容审查](skills/paper-research/protocols/verification.md)对结论进行 claim 级交叉验证和引用真实性检查。审查结果作为 Phase 5 Review 的输入。
+> **报告草稿完成后** → 执行[内容审查](verification.md)对结论进行 claim 级交叉验证和引用真实性检查。审查结果作为 Phase 5 Review 的输入。
 
 > **完成清单**：
 > - [ ] APA 7.0 报告草稿已写入 `04-composition/draft-report.md`
@@ -210,6 +212,8 @@ Phase 5 的三个评审 Agent 以**并行拓扑**执行，而非顺序执行。�
 
 ## Phase 6: Revision
 
+交付前更新research-state.md，旧方案/摘要加被替代提示但保留正文；session-log更新前保留历史运行记录，不能将旧高评分当作当前结论验证。
+
 > **启动条件**：Phase 5 评审完成
 
 Report compiler addresses feedback, resolves conditions, produces final report.
@@ -225,7 +229,7 @@ Output → `06-report/research-report.md` + `06-report/references.md`
 
 **Phase 6 完成后（可选）**：写入 Session-Log 用于跨会话知识积累：
 
-写入 `{research-topic}/.session-log.json`，格式见 `skills/paper-research/protocols/source-reliability.md`。Deep Mode 的 `mode` 字段填入实际使用的 Operational Mode（full/lit-review/systematic-review 等）。
+写入 `{research-topic}/.session-log.json`，格式见 `protocols/source-reliability.md`。Deep Mode 的 `mode` 字段填入实际使用的 Operational Mode（full/lit-review/systematic-review 等）。
 
 ---
 
@@ -264,7 +268,7 @@ Output → `06-report/research-report.md` + `06-report/references.md`
 | **IRON RULE: Vibe citing** | Every reference verified independently; gray zone = FAIL |
 | Skipping phases | Complete each phase fully; output is next phase input |
 | Shallow Socratic (disguised answers) | Ask genuine questions exposing assumptions |
-| Source tier inflation | Evidence hierarchy: peer-reviewed > preprint > gray lit |
+| Source tier inflation | Record peer-review/version status; assess claim-specific design, original evidence and applicability rather than a fixed source ranking |
 
 **IRON RULE:** Every claim must have a citation. No unsupported assertions.
 

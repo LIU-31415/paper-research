@@ -10,6 +10,8 @@
 
 ## Search Refinement
 
+接收主Agent提供的当前项目/范围与research-state.md参考，按 [研究门槛](../protocols/research-gates.md) 处理；缺失条件保留未知，不从其他项目/示例继承。旧结果复用先查适用性和版本。
+
 在调用 Semantic Scholar/OpenAlex 前，先执行与 Quick Mode 相同的两步策略：
 1. **WebSearch 前置探查** → 提取领域标准术语
 2. **Keyword Engineering** → 用提取术语精化搜索词
@@ -35,7 +37,7 @@ Bibliography Agent 分解搜索策略
 
 ## Merge Rules
 
-- 同名/同内容去重，保留引用数高的版本
+- DOI/题名去重记录，保留预印本/正式版/更正关系及特有结果；再按研究/数据集分组，未知标INDEPENDENCE_UNKNOWN，不按引用数选真伪或把多渠道计作独立证据
 - 每 sub-agent 返回 top 5，归并后保留 top 10-15
 - 冲突结果标注双方来源，不强行统一
 - 单次最多 3 个 sub-agent；SS 查询错开 ≥1s
@@ -51,6 +53,6 @@ Phase 2 开始前验证 WebSearch/WebFetch/SS 工具已通过 ToolSearch 预加�
 
 ## Related
 
-- `skills/paper-research/protocols/quick-mode.md` — Quick Mode（搜索词精化参考）
-- `skills/paper-research/protocols/deep-mode.md` — Deep Mode Phase 2（调用方）
-- `skills/paper-research/SKILL.md` — 主 skill 入口
+- `protocols/quick-mode.md` — Quick Mode（搜索词精化参考）
+- `protocols/deep-mode.md` — Deep Mode Phase 2（调用方）
+- `SKILL.md` — 主 skill 入口
