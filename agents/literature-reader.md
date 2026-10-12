@@ -27,12 +27,14 @@
   │               │
   │               └→ 各输出 4 文件到 {research-topic}/{mode_prefix}investigation/literature/{paper_id}/
   │
-  └→ 主 agent 收集 → 多 Agent 信息核对（[verification.md](skills/paper-research/protocols/verification.md)）
+  └→ 主 agent 收集 → 多 Agent 信息核对（[verification.md](../protocols/verification.md)）
 ```
 
 ---
 
 ## Dispatch Template
+
+按 [研究门槛](../protocols/research-gates.md) 记录实际阅读用途与范围。无法取得必要原文/SI时返回partial及缺口，不声称完整核验，也不通过其他摘要补齐。
 
 ```yaml
 Agent:
@@ -41,6 +43,8 @@ Agent:
     ## Background
     子任务：对以下文献执行完整分层阅读，输出 claim table + gist index + 原文位置索引。
     所属流程：paper-research（Quick/Deep Mode 通用）
+    当前项目/范围及条件参考：{research_state_reference}（主Agent提供；未知项保持未知）
+    claim用途及需要核对的Methods/Results/图表/SI：{claim_use_and_required_sections}
 
     ## Task Specification
     ### WHAT
@@ -59,7 +63,7 @@ Agent:
     - source.{pdf|txt} ← 原文副本
     - quality-report.md ← 解析质量报告
     - gist-index.md ← gist 索引（含行号范围）
-    - claim-table.md ← 原子 claim 表（格式见 skills/paper-research/protocols/verification.md）
+    - claim-table.md ← 原子 claim 表（格式见 protocols/verification.md）
 
     ### DON'T
     - 不修改任何现有文件
@@ -72,6 +76,10 @@ Agent:
     gist_summary: {一句话文献核心发现}
     claim_count: {提取的 claim 数}
     key_claims: {3-5条最重要的claim原文及位置}
+    reading_level: {METADATA_ONLY|ABSTRACT_READ|FULLTEXT_SECTION_READ|FULLTEXT_READ；SI_READ单列}
+    study_group: {研究/数据集ID或INDEPENDENCE_UNKNOWN}
+    support_scope: {每条关键claim的用途、条件、支撑范围和缺失原文/SI}
+    checked_date: {核查日期；partial不可标为完整核验}
 ```
 
 ---
@@ -88,6 +96,6 @@ Agent:
 
 ## Related
 
-- `skills/paper-research/protocols/hierarchical-reading.md` — 上游分层阅读协议（调用方）
-- `skills/paper-research/protocols/verification.md` — 下游数据级核对（data 模式）
-- `skills/paper-research/SKILL.md` — 主 skill 入口
+- `protocols/hierarchical-reading.md` — 上游分层阅读协议（调用方）
+- `protocols/verification.md` — 下游数据级核对（data 模式）
+- `SKILL.md` — 主 skill 入口

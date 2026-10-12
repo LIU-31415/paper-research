@@ -2,7 +2,7 @@
 
 > Claude Code Skill — 多源搜索与结构化学术研究协议
 
-`v4.0 | 2026-06-05 | active`
+`v4.1 | 2026-10-12 | active`
 
 ---
 
@@ -57,6 +57,8 @@
 
 ## 两种模式
 
+两种模式共同执行 [研究执行门槛](protocols/research-gates.md)：当前项目/状态、历史复用、独立研究及阅读用途。项目条件维护在使用者主题目录中，不在通用skill内预设医院样本或实验平台。旧版本仅保留历史，不作为现行规则。
+
 | 模式 | 场景 | 输出 |
 |------|------|------|
 | **Quick** | 查事实、概览、验证 | Research Brief（500-1500字） |
@@ -86,6 +88,8 @@
 
 ## 协议体系
 
+所有入口的共同前置规则：[protocols/research-gates.md](protocols/research-gates.md)。
+
 | 文件 | 说明 |
 |------|------|
 | [SKILL.md](SKILL.md) | **主入口** — Mode Selection + 路由 + Protocol Index（~80行） |
@@ -104,6 +108,8 @@
 
 | Date | Version | Change |
 |:---|:---|:---|
+| 2026-10-12 | **v4.1** | 统一项目状态与历史复用、独立研究判断、阅读用途及claim支撑门槛；修复入口frontmatter分隔符 |
+
 | 2026-06-05 | **v3.0** | 文档拆分重构：SKILL.md 仅保留路由；Quick/Deep 拆为独立子文档；跨模式协议独立文件化 |
 | 2026-06-04 | **v2.8** | Dynamic Workflows 并行拓扑 + P0-P4 修复（description 优化、启动条件、检查清单、规则索引） |
 | 2026-05-23 | **v2.2** | Sub-agent 并行分层阅读 + 多 Agent 信息核对 + 原文位置索引 |

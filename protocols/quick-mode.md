@@ -1,13 +1,15 @@
 # Quick Mode — 快速调研协议
 
 > Quick multi-source search & synthesis protocol for fast, reliable answers.
-> Part of `paper-research` skill — loaded by `skills/paper-research/SKILL.md` when Quick Mode is selected.
+> Part of `paper-research` skill — loaded by `SKILL.md` when Quick Mode is selected.
 
 `version: v3.0 | created: 2026-05-04 | updated: 2026-06-05 | status: active`
 
 ---
 
 ## Core Mechanism
+
+先执行 [研究门槛](research-gates.md)。创建/继续主题目录时维护research-state.md，先核对当前项目条件、现行版本与旧输出有效性；已有答案或旧session-log不允许直接跳过检查。
 
 ```
 Single Query
@@ -27,9 +29,9 @@ Single Query
     │
     ├→ Cross-Validation
     │   ├─ 整合多 Agent 核对报告（如有）
-    │   ├─ Multi-source consensus → adopt
-    │   ├─ Conflict → authority > recency > volume
-    │   ├─ Single source → downgrade, note limitation
+    │   ├─ Group independent studies; assess direct support and scope
+    │   ├─ Conflict → compare design, applicability and uncertainty
+    │   ├─ Single study → assess quality; channel count is not confidence
     │   └─ No source → state no direct evidence
     │
     ├→ Synthesis
@@ -222,7 +224,7 @@ When the research topic originates in Chinese:
 
 - **Concurrent** (multiple tool calls in one message), no queue
 - Return **top 5-10 results** per source
-- Source fails → down-weight, continue
+- Source access fails → record verification gap and continue; access failure does not reduce scientific weight
 - **Semantic Scholar 速率限制**：每次查询间隔 ≥1 秒，逐个发送，禁止并行多条 Semantic Scholar 查询
 - **利用等待间隔**：Semantic Scholar 查询间的 ≥1 秒间隔内，并行发起 OpenAlex 查询，不浪费空闲
 
@@ -256,7 +258,7 @@ When the research topic originates in Chinese:
 4. **SS 速率限制 + 扇出**：多个 SS 查询时错开 ≥1s 调度，或合并到一个 sub-agent 内串行
 
 **归并规则**：
-- 按 URL 去重（保留引用数高的版本）
+- 按DOI/题名去重记录，保留版本与更正；再按研究/数据集分组，独立性未知标INDEPENDENCE_UNKNOWN。URL不同或引用数高不等于独立证据或更可信版本
 - 按相关性排序（high > medium > low），再按年份
 - 每来源保留 top 5-8，总计 top 12-15
 - 来源无结果 → 标记 "no results from {source}"
@@ -288,11 +290,11 @@ When the research topic originates in Chinese:
 | Semantic Scholar | `get_paper` for abstract, `get_paper_fulltext` if needed |
 | OpenAlex | WebFetch `https://api.openalex.org/works?search=` 获取元数据 + 引用数 |
 
-**源不可用处理**：任一 Source 请求失败（含间接查询无结果）→ 降级标记该源，注明 limitation，继续流程不中断。
+**源不可用处理**：任一 Source 请求失败（含间接查询无结果）→ 记录访问缺口，注明 limitation，继续流程不中断；不据此降低科学证据权重。
 
-**Don't fetch full text blindly** — only when abstract is insufficient.
+按研究门槛§4将阅读深度绑定结论用途：摘要只能支持明确报告的受限结果；方法、剂量、定量提取与机制判断须核对相关原文及必要SI。缺全文时保留待核，不能生成确定实验协议。
 
-> **获取到全文后** → 判断文献数：≥2 篇则启动 Sub-agent 并行分层阅读（每篇完整执行质量快检→分块→gist→精读→claim 提取，输出 4 文件到 `01-investigation/literature/{paper_id}/`），主 agent 收集后执行 [多 Agent 信息核对](skills/paper-research/protocols/verification.md)；1 篇则主 agent 单线执行 [分层阅读协议](skills/paper-research/protocols/hierarchical-reading.md)。
+> **获取到全文后** → 判断文献数：≥2 篇则启动 Sub-agent 并行分层阅读（每篇完整执行质量快检→分块→gist→精读→claim 提取，输出 4 文件到 `01-investigation/literature/{paper_id}/`），主 agent 收集后执行 [多 Agent 信息核对](verification.md)；1 篇则主 agent 单线执行 [分层阅读协议](hierarchical-reading.md)。
 
 **内容获取完成后**，将搜索结果汇总写入 `01-investigation/search-results.md`（含查询来源、结果列表、选取依据）。
 
@@ -320,8 +322,8 @@ Attempt Semantic Scholar get_paper / get_paper_fulltext
 
 **规则**：
 1. **禁止编造**被付费墙阻挡的数据。无法读取则标注空缺，在报告中注明。
-2. **英文文献交叉验证**：中文论文的数值若能找到英文等同文献佐证，标注"中文摘要级 + 英文文献 [[ref]] 佐证"。
-3. **证据降级**：仅摘要可获取的数据降一级——从"原创研究"降为"摘要级证据"。
+2. **英文文献补充**：相近英文研究单独记录体系与支撑范围，不能替代中文原文核实其数值/方法；若为同一研究不同版本，则合并研究组且不计独立佐证。
+3. **用途限制**：标ABSTRACT_READ并限定为摘要明确报告的结果；简单降低置信度不能放行未读方法、剂量、定量提取或机制结论。
 4. **来源标注**：在引用条目末尾加上 `(Chinese, abstract only)`。
 
 > **完成清单**：
@@ -334,7 +336,7 @@ Attempt Semantic Scholar get_paper / get_paper_fulltext
 > 
 > **如果获取到全文**，额外产出：
 > - `01-investigation/literature/{paper_id}/`（分层阅读 4 文件 + 原文副本）
-> - 多 Agent 核对报告（≥2 篇文献时）参照 [verification.md data 模式](skills/paper-research/protocols/verification.md)
+> - 多 Agent 核对报告（≥2 篇文献时）参照 [verification.md data 模式](verification.md)
 
 ## Step 4: Cross-Validation
 
@@ -342,17 +344,17 @@ Attempt Semantic Scholar get_paper / get_paper_fulltext
 
 Internal quality check before synthesis.
 
-- 有 [多 Agent 核对报告](skills/paper-research/protocols/verification.md) → 以核对报告结论为优先输入，补充非文献来源判断
+- 有 [多 Agent 核对报告](verification.md) → 以核对报告结论为优先输入，补充非文献来源判断
 - 无核对报告 → 按以下规则判断：
 
 | Situation | Action |
 |-----------|--------|
-| Multi-source agreement | Adopt, high confidence |
-| Conflict with multi-source on one side | Trust multi-source side |
-| Both single-source | authority > recency > volume; flag if still uncertain |
-| Single source only, no cross-ref | Downgrade, note limitation in output |
-| No source | State no direct evidence |
-| Time-dependent conclusions | Use latest, note timeline |
+| 同一研究跨渠道出现 | 一个研究组，不增加独立支持 |
+| 多研究结果相符 | 核对独立性、设计与适用性后判断支持强度，不自动高置信 |
+| 研究结果冲突 | 回溯提取与条件差异；不能按来源数/日期/引用数裁决 |
+| 单研究直接证据 | 按质量给出受限结论，不因单渠道自动降级 |
+| 无已核实支撑 | 无直接证据或待核候选 |
+| 时间敏感结论 | 定向查新/更正核查，注明访问限制和时间线 |
 
 > **完成清单**：
 > - [ ] 已检查是否有多 Agent 核对报告（有则以它为优先输入）
@@ -397,18 +399,18 @@ Narrative body... (logical flow, no inline references)
 ## Step 6: Content Verification
 
 > **启动条件**：Synthesis 完成（Step 5）且 本次会话涉及文献阅读
-> **跳过条件**：纯搜索任务 / 未获取任何文献全文 / 用户明确要求跳过
+> **跳过条件**：仅列候选且不提取科学结论时可省略报告格式；只读摘要或用户省略评审不豁免claim支撑检查，缺原文保持待核
 
 在合成之后、输出之前，对合成结果的每条结论进行内容审查。仅在本次会话涉及文献阅读时执行。
 
-> **详细协议** → `skills/paper-research/protocols/verification.md`
+> **详细协议** → `protocols/verification.md`
 >
-> **与多 Agent 信息核对的关系**：核对（Step 3→4 之间）= 跨文献原始 claim 一致性检查（数据级），通过 [verification.md](skills/paper-research/protocols/verification.md) 执行；内容审查（Step 6）= 报告中引用的 claim 验证（报告级，含引用真实性检查）。两者层次不同但互为补充——核对确保文献间数据可信，内容审查确保最终输出引述准确。
+> **与多 Agent 信息核对的关系**：核对（Step 3→4 之间）= 跨文献原始 claim 一致性检查（数据级），通过 [verification.md](verification.md) 执行；内容审查（Step 6）= 报告中引用的 claim 验证（报告级，含引用真实性检查）。两者层次不同但互为补充——核对确保文献间数据可信，内容审查确保最终输出引述准确。
 
 | 步骤 | 说明 |
 |------|------|
 | Claim 抽取 | 将每条结论拆解为原子 claim (subject, relation, object) |
-| 跨 Agent/跨源比对 | 一致→高置信度；矛盾→标记争议，引用原文裁决；孤 claim→低置信度 |
+| 跨 Agent/跨源比对 | 按独立研究、设计和适用性评估；保留冲突；单研究不自动降级 |
 | 引用验证 | 每条引用检查 DOI/PMID 真实性（使用 Semantic Scholar） |
 | 输出 | Claim Table：每条声明的来源、置信度、验证状态 |
 
@@ -433,7 +435,7 @@ Auto-generate 3 follow-up directions:
 - **Verify**: "Does this hold under X condition?"
 - **Extend**: "What are related directions?"
 
-**模式切换评估**：若当前研究结果表明显著未覆盖的深度（系统性文献缺口、需方法学评估、跨领域集成需求），应在此步骤主动建议：*"当前结论基于 Quick 调研，如需系统综述（APA 报告 + 全文 meta 分析），建议切换到 Deep Mode。已生成 `{research-topic}/` 目录，切换后可复用已有文献和搜索结果。"*
+**模式切换评估**：若当前研究结果表明显著未覆盖的深度（系统性文献缺口、需方法学评估、跨领域集成需求），应在此步骤主动建议：*"当前结论基于 Quick 调研，如需系统综述（APA 报告 + 全文 meta 分析），建议切换到 Deep Mode。已生成 `{research-topic}/` 目录，切换后可复用通过当前状态与证据有效性检查的文献和搜索结果。"*
 
 > **完成清单**：
 > - [ ] 3 个后续方向已生成（更深/验证/扩展）
@@ -449,7 +451,7 @@ Auto-generate 3 follow-up directions:
 
 写入最终研究简报。目录骨架已在 Step 1 创建，中间产物（claim table、交叉验证报告、内容审查报告）已在各步骤产生时落盘。
 
-1. 写入 `02-analysis/synthesis-notes.md` — 归并后的核心发现与源要点
+1. 核对并更新research-state.md当前状态；保留被替代记录和版本指针。写入 `02-analysis/synthesis-notes.md` — 归并后的核心发现与源要点
 2. 写入 `03-report/research-brief.md` — 最终简短回答（500-1500字）
 
 > **完成清单**：
@@ -464,6 +466,8 @@ Auto-generate 3 follow-up directions:
 ---
 
 ## Step 9: Session-Log（跨会话学习）
+
+session-log只记录有日期的检索经验，不证明科学结论仍有效。覆盖最新日志前保留先前运行记录；复用材料依研究门槛核对research-state.md、项目条件、原核查日期、阅读范围及撤回/替代项。
 
 > **启动条件**：Step 8 完成（可选步骤，建议执行）
 
@@ -484,7 +488,7 @@ Auto-generate 3 follow-up directions:
 }
 ```
 
-> 详见 `skills/paper-research/protocols/source-reliability.md` 的 Session-Log 格式定义和累积矩阵更新规则。
+> 详见 `protocols/source-reliability.md` 的 Session-Log 格式定义和累积矩阵更新规则。
 
 > **完成清单**：
 > - [ ] `.session-log.json` 已写入 `{research-topic}/` 目录
